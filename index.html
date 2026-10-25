@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff4f6">
+
+<title>Little by Little ♡</title>
+
+<style>
+:root {
+  --pink: #f3b7ca;
+  --light-pink: #fff0f4;
+  --cream: #fffaf3;
+  --blue: #dce9f8;
+  --green: #dce9dd;
+  --text: #493c43;
+  --muted: #92818a;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+header {
+  padding: 24px 20px;
+  background: var(--light-pink);
+  border-radius: 0 0 28px 28px;
+}
+
+.brand {
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 20px 16px 100px;
+}
+
+h1 {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-family: Georgia, serif;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin: 16px 0;
+  border-radius: 24px;
+  box-shadow: 0 5px 20px #7455650c;
+}
+
+.pink {
+  background: var(--light-pink);
+}
+
+.blue {
+  background: var(--blue);
+}
+
+.green {
+  background: var(--green);
+}
+
+.label {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+button {
+  border: 0;
+  border-radius: 15px;
+  padding: 13px 17px;
+  background: var(--pink);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+nav button {
+  flex: 1;
+  background: white;
+}
+
+nav button.active {
+  background: var(--pink);
+}
+
+.progress {
+  height: 9px;
+  background: #f3e5e9;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.progress div {
+  height: 100%;
+  background: #d98da9;
+  transition: width .3s;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f3e9ec;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row input {
+  width: 20px;
+  height: 20px;
+  accent-color: #d98da9;
+}
+
+.row span {
+  flex: 1;
+}
+
+.small {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 7px;
+}
+
+.grid button {
+  padding: 10px 0;
+  background: white;
+  border: 1px solid #f2e4e9;
+}
+
+.grid button.done {
+  background: var(--green);
+}
+
+.grid button.selected {
+  outline: 2px solid #d98da9;
+}
+
+input[type="number"] {
+  padding: 12px;
+  border: 1px solid #ead8df;
+  border-radius: 12px;
+  font-size: 16px;
+  width: 100%;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="brand">♡ Little by Little</div>
+  <div class="subtitle">YOUR 90-DAY RESET</div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  made for your next chapter ♡
+</footer>
+
+<script>
+const START = new Date(2026, 9, 26);
+const TOTAL = 90;
+const STORAGE = "littleByLittleProgress";
+
+const missions = [
+  ["Street dance", "Nauč se jeden nový groove."],
+  ["Drawing", "Nakresli svoje oblíbené tenisky."],
+  ["French", "Nauč se 10 francouzských slov."],
+  ["Photography", "Vyfoť 5 zajímavých textur."],
+  ["Sewing", "Ušij malou látkovou mašličku."],
+  ["Cooking", "Připrav si nový jednoduchý snack."],
+  ["Life skills", "Nauč se jeden trik s kartami."],
+  ["Music", "Vytvoř vlastní rytmus tleskáním."],
+  ["Drawing", "Nakresli svůj pokoj zpaměti."],
+  ["Creativity", "Vytvoř mini moodboard."],
+  ["Street dance", "Nauč se krok grapevine."],
+  ["German", "Nauč se 10 nových německých slov."],
+  ["Origami", "Slož papírového jeřába."],
+  ["Photography", "Vyzkoušej pravidlo třetin."],
+  ["DIY", "Vyrob si vlastní záložku."],
+  ["Movement", "Vyzkoušej jemnou mobilizační rutinu."],
+  ["Writing", "Napiš krátký příběh o 100 slovech."],
+  ["Cooking", "Připrav si nové jednoduché snídaňové jídlo."],
+  ["Life skills", "Nauč se uvázat jednoduchý uzel."],
+  ["Drawing", "Nakresli svoji ruku."],
+  ["Music", "Nauč se krátkou pasáž na flétnu."],
+  ["Design", "Vytvoř plakát v Canvě."],
+  ["French", "Nahraj minutové představení ve francouzštině."],
+  ["Street dance", "Nauč se shuffle krok."],
+  ["Drawing", "Vytvoř obrázek pouze třemi barvami."],
+  ["Cooking", "Připrav si jablečný skořicový snack."],
+  ["DIY", "Vyrob jednoduchý náramek."],
+  ["Design", "Vyzkoušej kreativní lettering."],
+  ["Street dance", "Natrénuj tři izolace těla."],
+  ["Photography", "Vyfoť zajímavý každodenní předmět."],
+  ["French", "Nauč se časovat nové francouzské sloveso."],
+  ["Organization", "Uspořádej jednu zásuvku."],
+  ["Writing", "Napiš dopis svému budoucímu já."],
+  ["Creativity", "Vytvoř moodboard vysněného výletu."],
+  ["Origami", "Slož malou papírovou krabičku."],
+  ["Music", "Nauč se krátkou melodii na flétnu."],
+  ["Drawing", "Nakresli zajímavou botu."],
+  ["Digital art", "Vytvoř opakující se vzor v Procreate."],
+  ["Cooking", "Připrav nový bezlepkový snack."],
+  ["German", "Nauč se pět nových německých frází."],
+  ["Street dance", "Vytvoř vlastní osmipočtovou choreografii."],
+  ["Painting", "Namaluj oblohu akvarelem."],
+  ["Writing", "Vymysli pět kreativních titulků."],
+  ["Sewing", "Nauč se přišít knoflík."],
+  ["Design", "Vytvoř vlastní tapetu na mobil."],
+  ["Photography", "Vyfoť deset věcí stejné barvy."],
+  ["DIY", "Vyrob vlastní pexeso."],
+  ["Music", "Nauč se krátkou hudební pasáž zpaměti."],
+  ["Drawing", "Nakresli autoportrét."],
+  ["Writing", "Napiš recenzi oblíbeného seriálu."],
+  ["Video", "Vytvoř krátké stop-motion video."],
+  ["Music", "Vymysli rytmus poklepáváním."],
+  ["DIY", "Vyrob papírovou květinu."],
+  ["French", "Nauč se 12 slov o rodině."],
+  ["Design", "Navrhni vlastní logo."],
+  ["Cooking", "Vyzkoušej nový jednoduchý recept."],
+  ["Drawing", "Nakresli zajímavou budovu."],
+  ["Street dance", "Nauč se nový footwork krok."],
+  ["Writing", "Vytvoř mini časopis o třech stránkách."],
+  ["Photography", "Vyfoť pět zajímavých stínů."],
+  ["Hair", "Nauč se zaplést jednoduchý cop."],
+  ["DIY", "Vyrob přání pro někoho blízkého."],
+  ["French", "Napiš tři věty do francouzského deníku."],
+  ["Music", "Procvič novou artikulaci na flétnu."],
+  ["Fashion", "Vytvoř outfitovou koláž."],
+  ["Art", "Vytvoř papírový vystřihovaný vzor."],
+  ["Movement", "Nauč se jemnou protahovací rutinu."],
+  ["Cooking", "Navrhni vlastní kartičku s receptem."],
+  ["Digital art", "Vytvoř sadu tří digitálních samolepek."],
+  ["Geography", "Nauč se pět zajímavostí o světě."],
+  ["Drawing", "Nakresli svoje oblíbené zvíře."],
+  ["Animation", "Vytvoř jednoduchou papírovou animaci."],
+  ["Design", "Navrhni obal fiktivního alba."],
+  ["Sewing", "Nauč se nový steh."],
+  ["Life skills", "Nauč se úhledně složit různé druhy oblečení."],
+  ["Writing", "Polož někomu z rodiny pět zajímavých otázek."],
+  ["Photography", "Vytvoř fotografický příběh z pěti snímků."],
+  ["Dance", "Procvič stabilitu při jednoduchém tanečním postoji."],
+  ["German", "Nauč se deset nových německých slov."],
+  ["Drawing", "Nakresli útulnou kavárnu."],
+  ["Learning", "Vytvoř mini prezentaci o zajímavém tématu."],
+  ["Cooking", "Připrav nové jednoduché bezlepkové jídlo."],
+  ["Video", "Nauč se nový trik při střihu videa."],
+  ["Design", "Navrhni tři vlastní digitální samolepky."],
+  ["Writing", "Napiš krátkou báseň."],
+  ["Street dance", "Nauč se přechod mezi dvěma tanečními kroky."],
+  ["Organization", "Vytvoř jednoduchou tabulku svého rozpočtu."],
+  ["Photography", "Zkus znovu vytvořit kompozici oblíbené fotky."],
+  ["Nature", "Najdi a poznávej pět druhů listů."],
+  ["Reflection", "Uspořádej mini výstavu svých oblíbených výtvorů."]
+];
+
+let progress = {};
+try {
+  progress = JSON.parse(localStorage.getItem(STORAGE)) || {};
+} catch (e) {
+  progress = {};
+}
+
+let selected = 0;
+let tab = "today";
+let goal = Number(localStorage.getItem("stepGoal")) || 7000;
+
+function dateAt(i) {
+  const d = new Date(START);
+  d.setDate(d.getDate() + i);
+  return d;
+}
+
+function key(i) {
+  const d = dateAt(i);
+  return [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, "0"),
+    String(d.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
+function todayIndex() {
+  const now = new Date();
+  const today = Date.UTC(
+    now.getFullYear(), now.getMonth(), now.getDate()
+  );
+  const start = Date.UTC(2026, 9, 26);
+  return Math.max(0, Math.min(89,
+    Math.floor((today - start) / 86400000)
+  ));
+}
+
+function isWeekend(i) {
+  const d = dateAt(i).getDay();
+  return d === 0 || d === 6;
+}
+
+function data(i) {
+  return progress[key(i)] || {};
+}
+
+function save() {
+  localStorage.setItem(STORAGE, JSON.stringify(progress));
+}
+
+function complete(i) {
+  const p = data(i);
+  const required = isWeekend(i)
+    ? ["steps", "mission"]
+    : ["wake", "steps", "mission"];
+
+  return required.every(k => p[k]);
+}
+
+function completedCount() {
+  return Array.from({length: TOTAL}, (_, i) => i)
+    .filter(complete).length;
+}
+
+function dateText(i) {
+  return dateAt(i).toLocaleDateString("cs-CZ", {
+    weekday: "long",
+    day: "numeric",
+    month: "long"
+  });
+}
+
+function toggle(name) {
+  if (!progress[key(selected)]) progress[key(selected)] = {};
+  progress[key(selected)][name] =
+    !progress[key(selected)][name];
+  save();
+  render();
+}
+
+function render() {
+  const p = data(selected);
+  const mission = missions[selected];
+  const weekend = isWeekend(selected);
+  const required = weekend
+    ? ["steps", "mission"]
+    : ["wake", "steps", "mission"];
+
+  const done = required.filter(k => p[k]).length;
+  const percent = Math.round(done / required.length * 100);
+  const total = completedCount();
+  const missionTotal = Array.from({length: TOTAL}, (_, i) => i)
+    .filter(i => data(i).mission).length;
+
+  const tabs = `
+    <nav>
+      <button data-tab="today" class="${tab === "today" ? "active" : ""}">♡ Today</button>
+      <button data-tab="journey" class="${tab === "journey" ? "active" : ""}">Calendar</button>
+      <button data-tab="settings" class="${tab === "settings" ? "active" : ""}">Settings</button>
+    </nav>`;
+
+  let content = "";
+
+  if (tab === "today") {
+    content = `
+      <p class="label">YOUR NEXT CHAPTER · DAY ${selected + 1}/90</p>
+      <h1>Small steps.<br><span style="color:#cf7899">Big energy.</span></h1>
+      <p class="small">${dateText(selected)} ·
+        ${selected === todayIndex() ? "TODAY" : "YOUR JOURNEY"}
+      </p>
+
+      <div class="card pink">
+        <p class="label">TODAY'S LITTLE MISSION ✿</p>
+        <h2>${mission[0]}</h2>
+        <p>${mission[1]}</p>
+        <p class="small">⏳ 30 minutes · Try something new.</p>
+        <button data-check="mission">
+          ${p.mission ? "✓ Challenge completed" : "Mark as completed ♡"}
+        </button>
+      </div>
+
+      <div class="card">
+        <p class="label">YOUR DAILY HABITS</p>
+
+        ${weekend ? `
+          <div class="row">
+            <span>☁️ Weekend morning</span>
+            <small>Free!</small>
+          </div>
+        ` : `
+          <label class="row">
+            <input type="checkbox" data-check="wake" ${p.wake ? "checked" : ""}>
+            <span>⏰ Wake up at 5:45</span>
+          </label>
+        `}
+
+        <label class="row">
+          <input type="checkbox" data-check="steps" ${p.steps ? "checked" : ""}>
+          <span>👟 Aim for ${goal.toLocaleString("cs-CZ")} steps</span>
+        </label>
+
+        <p class="small">Your progress today: ${done}/${required.length}</p>
+        <div class="progress"><div style="width:${percent}%"></div></div>
+        <p class="small">Rest when you need to. Progress isn't perfection. ♡</p>
+      </div>
+
+      <div class="card blue">
+        <p class="label">YOUR 90-DAY JOURNEY</p>
+        <h2>${total}/90 days completed</h2>
+        <div class="progress"><div style="width:${total / 90 * 100}%"></div></div>
+        <p class="small">${missionTotal} new skills and challenges completed.</p>
+        <button data-tab="journey">View my calendar →</button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;gap:10px">
+        <button data-move="-1" ${selected === 0 ? "disabled" : ""}>← Previous</button>
+        <button data-move="1" ${selected === 89 ? "disabled" : ""}>Next →</button>
+      </div>
+      <p style="text-align:center"><button data-today="1">Go to today</button></p>
+    `;
+  }
+
+  if (tab === "journey") {
+    content = `
+      <p class="label">YOUR PERSONAL RESET</p>
+      <h1>90 days of becoming ✿</h1>
+      <p class="small">Tap any day to view its challenge.</p>
+      <div class="card">
+        <div class="grid">
+          ${Array.from({length: 90}, (_, i) => `
+            <button data-day="${i}"
+              class="${complete(i) ? "done" : ""} ${i === selected ? "selected" : ""}">
+              ${i + 1}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <div class="card pink">
+        <p class="label">DAY ${selected + 1}</p>
+        <h2>${missions[selected][0]}</h2>
+        <p>${missions[selected][1]}</p>
+        <button data-tab="today">Open this day →</button>
+      </div>
+    `;
+  }
+
+  if (tab === "settings") {
+    content = `
+      <p class="label">MAKE IT YOURS</p>
+      <h1>Your settings ♡</h1>
+      <div class="card">
+        <label for="goal">Daily step goal</label>
+        <p class="small">Change this whenever you need to.</p>
+        <input id="goal" type="number" min="1000" max="20000" step="500" value="${goal}">
+        <p class="small">Suggested starting point: 7,000 steps. Your wellbeing matters more than a number.</p>
+      </div>
+      <div class="card blue">
+        <p class="label">YOUR CHALLENGE</p>
+        <p><b>Start:</b> 26 October 2026</p>
+        <p><b>Finish:</b> 23 January 2027</p>
+        <p><b>Weekdays:</b> 5:45 wake-up</p>
+        <p><b>Weekends:</b> no alarm required</p>
+        <p><b>Daily skill:</b> 30 minutes</p>
+      </div>
+      <div class="card">
+        <p class="label">START FRESH</p>
+        <p class="small">This clears your saved progress on this device.</p>
+        <button data-reset="1">Reset my progress</button>
+      </div>
+    `;
+  }
+
+  document.getElementById("app").innerHTML = tabs + content;
+}
+
+document.addEventListener("click", e => {
+  const target = e.target.closest("button, input");
+  if (!target) return;
+
+  if (target.dataset.tab) {
+    tab = target.dataset.tab;
+    render();
+  }
+
+  if (target.dataset.move) {
+    selected = Math.max(0, Math.min(89,
+      selected + Number(target.dataset.move)));
+    tab = "today";
+    render();
+  }
+
+  if (target.dataset.today) {
+    selected = todayIndex();
+    tab = "today";
+    render();
+  }
+
+  if (target.dataset.day !== undefined) {
+    selected = Number(target.dataset.day);
+    tab = "journey";
+    render();
+  }
+
+  if (target.dataset.check) {
+    toggle(target.dataset.check);
+  }
+
+  if (target.dataset.reset && confirm("Reset all progress?")) {
+    progress = {};
+    save();
+    render();
+  }
+});
+
+document.addEventListener("change", e => {
+  if (e.target.id === "goal") {
+    goal = Math.max(1000, Math.min(20000,
+      Number(e.target.value) || 7000));
+    localStorage.setItem("stepGoal", goal);
+    render();
+  }
+});
+
+selected = todayIndex();
+render();
+</script>
+</body>
+</html>
